@@ -1,14 +1,20 @@
-import sys
-import asyncio
 import subprocess
+import sys
+import os
 
-# Instala os browsers se necessário
 def ensure_browsers_installed():
-    try:
-        subprocess.run("playwright install chromium", shell=True, check=True)
-    except Exception as e:
-        print("Erro ao instalar o Chromium via Playwright:", e)
+    # Verifica se o diretório do Chromium existe; se não, tenta instalar
+    chromium_path = os.path.expanduser("~/.cache/ms-playwright/chromium_headless_shell-1155/chrome-linux/headless_shell")
+    if not os.path.exists(chromium_path):
+        try:
+            print("Instalando browsers do Playwright...")
+            subprocess.run("playwright install chromium", shell=True, check=True)
+        except Exception as e:
+            print("Erro ao instalar Chromium:", e)
+    else:
+        print("Browser já instalado.")
 
+# Chama a função antes de qualquer importação do Playwright
 ensure_browsers_installed()
 
 if sys.platform.startswith("win"):
