@@ -1,8 +1,17 @@
 import sys
 import asyncio
+import subprocess
+
+# Instala os browsers se necessário
+def ensure_browsers_installed():
+    try:
+        subprocess.run("playwright install chromium", shell=True, check=True)
+    except Exception as e:
+        print("Erro ao instalar o Chromium via Playwright:", e)
+
+ensure_browsers_installed()
 
 if sys.platform.startswith("win"):
-    # Força o uso do Proactor, que suporta criação de subprocessos no Windows.
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 import nest_asyncio
@@ -13,6 +22,7 @@ import time
 from urllib.parse import urlparse, urlunparse
 from playwright.sync_api import sync_playwright
 import pandas as pd
+
 
 # Definindo constantes para os literais repetidos
 RAW_URL_LABEL = "Raw URL"
